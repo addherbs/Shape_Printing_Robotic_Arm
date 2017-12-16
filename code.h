@@ -42,6 +42,21 @@ void DiagonalRightLeftTop(int speedB, int speedC, int time) {
     OnRevReg(OUT_B, speedB);
     Wait(time-150);
 
+int getFinalDegreeFromRange(int degree) {
+
+    if (degree <= 30) {
+        return 45;
+    }
+    if (degree <= 60) {
+        return 45;
+    }
+    if (degree > 60) {
+        return 75;
+    }
+    return 0;
+}
+	
+	
 int main()
 {
 	InitEV3();
