@@ -56,6 +56,18 @@ int getFinalDegreeFromRange(int degree) {
     return 0;
 }
 	
+int getSpeedB(int degree) {
+    switch (degree) {
+    case 30:
+        return 35;
+    case 45:
+        return 35;
+    case 75:
+        return 45;
+    }
+    return 0;
+}
+
 	
 int main()
 {
