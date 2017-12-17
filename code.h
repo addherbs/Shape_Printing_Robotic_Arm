@@ -80,6 +80,19 @@ int getSpeedC(int degree) {
     }
     return 0;
 }
+
+
+int getTimeForDegree(int degree) {
+    switch (degree) {
+    case 30:
+        return 1250;
+    case 45:
+        return 1250;
+    case 75:
+        return 1250;
+    }
+    return 0;
+}
 	
 int main()
 {
