@@ -68,6 +68,18 @@ int getSpeedB(int degree) {
     return 0;
 }
 
+
+int getSpeedC(int degree) {
+    switch (degree) {
+    case 30:
+        return 10;
+    case 45:
+        return 10;
+    case 75:
+        return 20;
+    }
+    return 0;
+}
 	
 int main()
 {
