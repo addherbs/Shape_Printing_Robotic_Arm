@@ -93,6 +93,47 @@ int getTimeForDegree(int degree) {
     }
     return 0;
 }
+
+// Tan(theta) = OPP_SIDE / ADJ_SIDE
+void decideDirection(int x0, int y0, int x1, int y1) {
+    int x_diff = 0, y_diff = 0;
+    double theta = 0.0, hypotenuse = 0.0;
+
+    if (x0 < x1) {
+        x_diff = x1 - x0;
+        LcdPrintf(1, "XD %d ", x_diff);
+        if (y0 < y1) {
+            //Go Diagonal Right to Left Top (8)
+            
+        } else if (y0 > y1) {
+            //Go Diagonal Left to Right Top (7)
+            
+        } else if (y0 == y1) {
+            // Vertical Bottom to Top (4)
+
+        }
+    } else if (x0 > x1) {
+        x_diff = x0 - x1;
+        LcdPrintf(1, "XD %d ", x_diff);
+        if (y0 < y1) {
+            //Go Diagonal Right to Left Bottom (6)
+        } else if (y0 > y1) {
+            //Go Diagonal Left to Right Bottom (5)
+        } else if (y0 == y1) {
+            // Vertical Top to Bottom (3)
+        }
+    } else {
+        // Here, x0 and X1 will be equal
+        // Because all other test cases will be done before this
+        if (y0 < y1) {
+            // Horizontal Right to Left (2)
+            
+        } else if (y0 > y1) {
+            // Horizontal Left to Right (1)
+        }
+    }
+}
+
 	
 int main()
 {
