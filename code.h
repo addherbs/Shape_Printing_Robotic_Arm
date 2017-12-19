@@ -104,12 +104,29 @@ void decideDirection(int x0, int y0, int x1, int y1) {
         LcdPrintf(1, "XD %d ", x_diff);
         if (y0 < y1) {
             //Go Diagonal Right to Left Top (8)
+            y_diff = y1 - y0;
+            theta = calculate_tan_inverse((double) y_diff, (double) x_diff);
+//            hypotenuse = ceil(hypot(y_diff, x_diff));
+            hypotenuse = ceil(sqrt(y_diff * y_diff + x_diff * x_diff));
+            moveDiagonal(8, theta, hypotenuse);
             
         } else if (y0 > y1) {
             //Go Diagonal Left to Right Top (7)
+            y_diff = y0 - y1;
+            theta = calculate_tan_inverse(y_diff, x_diff);
+            hypotenuse = ceil(sqrt(y_diff * y_diff + x_diff * x_diff));
+            moveDiagonal(7, theta, hypotenuse);
             
         } else if (y0 == y1) {
             // Vertical Bottom to Top (4)
+            //------------- Move Arm Vertically in Front for X_Difference Blocks----------------------
+
+            LcdPrintf(1, "VBT %d ", x_diff);
+            for (int i = 0; i < x_diff; i++) {
+
+                VerticalBottomTop(10, 1666);
+            }
+            //----------------------------------------------------------------------
 
         }
     } else if (x0 > x1) {
