@@ -158,9 +158,26 @@ void decideDirection(int x0, int y0, int x1, int y1) {
         // Because all other test cases will be done before this
         if (y0 < y1) {
             // Horizontal Right to Left (2)
-            
+            y_diff = y1 - y0;
+            LcdPrintf(1, "YD %d ", y_diff);
+            //------------- Move Arm Horizontally Left in Y_DIFFEREBCE Blocks----------------------
+            for (int i = 0; i < y_diff; i++) {
+                std::string HRL("HRL!");
+                LcdPrintf(1, "%s  ", HRL.c_str());
+                HorizontRightLeft(10, 2500);
+            }
+            //----------------------------------------------------------------
         } else if (y0 > y1) {
             // Horizontal Left to Right (1)
+            y_diff = y0 - y1;
+            LcdPrintf(1, "YD %d ", y_diff);
+            //------------- Move Arm Horizontally Right in Y_DIFFEREBCE Blocks----------------------
+            for (int i = 0; i < y_diff; i++) {
+                std::string HLR("HLR!");
+                LcdPrintf(1, "%s  ", HLR.c_str());
+                HorizontalLeftRight(10, 2500);
+            }
+            //----------------------------------------------------------------
         }
     }
 }
