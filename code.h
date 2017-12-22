@@ -94,6 +94,29 @@ int getTimeForDegree(int degree) {
     return 0;
 }
 
+
+void moveDiagonal(int diagonalCase, double degree, double hypotenuse) {
+    int final_degree = 0;
+    final_degree = getFinalDegreeFromRange((int) degree);
+    int speedB = getSpeedB(final_degree);
+    int speedC = getSpeedC(final_degree);
+    int time = getTimeForDegree(final_degree);
+    LcdPrintf(1, "MD %d %f\n", final_degree, hypotenuse);
+    switch (diagonalCase) {
+    case 5: //Diagonally left to right in bottom direction
+        break;
+    case 6: //Diagonally right to left in bottom direction
+        break;
+    case 7: //Diagonally left to right in top direction
+        break;
+    case 8: //Diagonally right to left in top direction
+        break;
+    default:
+        break;
+    }
+}
+
+
 // Tan(theta) = OPP_SIDE / ADJ_SIDE
 void decideDirection(int x0, int y0, int x1, int y1) {
     int x_diff = 0, y_diff = 0;
