@@ -1,7 +1,13 @@
 #include <ev3.h>
 #include <string>
 #include <math.h>
-
+#define PI 3.14159265
+double calculate_tan_inverse(int x, int y) {
+    double division, tan_inservse;
+    division = (double) x / y;
+    tan_inservse = atan(division) * 180 / PI;
+    return tan_inservse;
+}
 void HorizontalLeftRight(int speed, int time) {
     OnFwdReg(OUT_C, speed);
     OnFwdReg(OUT_B, speed);
@@ -41,6 +47,7 @@ void DiagonalRightLeftTop(int speedB, int speedC, int time) {
     OnFwdReg(OUT_C, speedC);
     OnRevReg(OUT_B, speedB);
     Wait(time-150);
+}
 
 int getFinalDegreeFromRange(int degree) {
 
@@ -55,7 +62,7 @@ int getFinalDegreeFromRange(int degree) {
     }
     return 0;
 }
-	
+
 int getSpeedB(int degree) {
     switch (degree) {
     case 30:
@@ -67,7 +74,6 @@ int getSpeedB(int degree) {
     }
     return 0;
 }
-
 
 int getSpeedC(int degree) {
     switch (degree) {
@@ -81,7 +87,6 @@ int getSpeedC(int degree) {
     return 0;
 }
 
-
 int getTimeForDegree(int degree) {
     switch (degree) {
     case 30:
@@ -94,7 +99,6 @@ int getTimeForDegree(int degree) {
     return 0;
 }
 
-
 void moveDiagonal(int diagonalCase, double degree, double hypotenuse) {
     int final_degree = 0;
     final_degree = getFinalDegreeFromRange((int) degree);
@@ -104,18 +108,33 @@ void moveDiagonal(int diagonalCase, double degree, double hypotenuse) {
     LcdPrintf(1, "MD %d %f\n", final_degree, hypotenuse);
     switch (diagonalCase) {
     case 5: //Diagonally left to right in bottom direction
+        LcdPrintf(1, "C5 ");
+        for (int i = 0; i < hypotenuse; i++) {
+            DiagonalLeftRightBottom(speedB, speedC, time);
+        }
         break;
     case 6: //Diagonally right to left in bottom direction
+        LcdPrintf(1, "C6 ");
+        for (int i = 0; i < hypotenuse; i++) {
+            DiagonalRightLeftBottom(speedC, speedB, time);
+        }
         break;
     case 7: //Diagonally left to right in top direction
+        LcdPrintf(1, "C7 ");
+        for (int i = 0; i < hypotenuse; i++) {
+            DiagonalLeftRightTop(speedC, speedB, time);
+        }
         break;
     case 8: //Diagonally right to left in top direction
+        LcdPrintf(1, "C8 ");
+        for (int i = 0; i < hypotenuse; i++) {
+            DiagonalRightLeftTop(speedB, speedC, time);
+        }
         break;
     default:
         break;
     }
 }
-
 
 // Tan(theta) = OPP_SIDE / ADJ_SIDE
 void decideDirection(int x0, int y0, int x1, int y1) {
@@ -131,15 +150,14 @@ void decideDirection(int x0, int y0, int x1, int y1) {
             theta = calculate_tan_inverse((double) y_diff, (double) x_diff);
 //            hypotenuse = ceil(hypot(y_diff, x_diff));
             hypotenuse = ceil(sqrt(y_diff * y_diff + x_diff * x_diff));
+
             moveDiagonal(8, theta, hypotenuse);
-            
         } else if (y0 > y1) {
             //Go Diagonal Left to Right Top (7)
             y_diff = y0 - y1;
             theta = calculate_tan_inverse(y_diff, x_diff);
             hypotenuse = ceil(sqrt(y_diff * y_diff + x_diff * x_diff));
             moveDiagonal(7, theta, hypotenuse);
-            
         } else if (y0 == y1) {
             // Vertical Bottom to Top (4)
             //------------- Move Arm Vertically in Front for X_Difference Blocks----------------------
@@ -150,7 +168,6 @@ void decideDirection(int x0, int y0, int x1, int y1) {
                 VerticalBottomTop(10, 1666);
             }
             //----------------------------------------------------------------------
-
         }
     } else if (x0 > x1) {
         x_diff = x0 - x1;
@@ -205,16 +222,60 @@ void decideDirection(int x0, int y0, int x1, int y1) {
     }
 }
 
-	
-int main()
-{
-	InitEV3();
+//void gotoInitialPosition(int x1, int y1) {
+//    int x0 = 1, y0 = 5;
+//    decideDirection(x0, y0, x1, y1);
+//    OnFwdReg(OUT_A, -50);
+//    Off(OUT_A);
+//}
 
-	std::string greeting("Hello World!");
+int main() {
+    InitEV3();
 
-	LcdPrintf(1, "%s\n", greeting.c_str());
-	Wait(2000);
+//OnFwdReg(OUT_A, 50);
 
-	FreeEV3();
-	
+    int coordinates[11][2] = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 },
+            { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+//  Set Coordinate Values
+    coordinates[0][0] = 3;
+    coordinates[0][1] = 5;
+    coordinates[1][0] = 5;
+    coordinates[1][1] = 3;
+    coordinates[2][0] = 4;
+    coordinates[2][1] = 1;
+    coordinates[3][0] = 1;
+    coordinates[3][1] = 1;
+    coordinates[4][0] = 1;
+    coordinates[4][1] = 3;
+    coordinates[5][0] = 3;
+    coordinates[5][1] = 5;
+
+    int iterations = 0;
+//Calculate Number Of (Co-ordinates)iterations
+    for (int i = 0; i < 10; i++) {
+        if (coordinates[i][0] == 0 && coordinates[i][1] == 0) {
+            break;
+        }
+        iterations++;
+    }
+
+//Set Final Coordinate to the first coordinate
+    coordinates[iterations][0] = coordinates[0][0];
+    coordinates[iterations][1] = coordinates[0][1];
+
+////Go To The Initial Position
+//    gotoInitialPosition(coordinates[0][0], coordinates[0][1]);
+
+// Main Loop
+// From Initial Position to Track Path and Go Back To Initial Position
+    int count = 0;
+    while (count < iterations - 1) {
+        // Sending Current Position(x0,y0) and next position(x1,y1) values
+        std::string forL("FOR");
+        LcdPrintf(1, "%s ", forL.c_str());
+        decideDirection(coordinates[count][0], coordinates[count][1],
+                coordinates[count + 1][0], coordinates[count + 1][1]);
+        count++;
+    }
+    FreeEV3();
 }
